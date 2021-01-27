@@ -12,10 +12,15 @@ class Sistema():
         for livro in self.livros_cadastrados:
             if livro["titulo"] == titulo:
                 return livro
-        return None
+        return False
 
     def cadastrar_livro(self, titulo= str, autor= str, emprestimo= str, estado= str, assunto= str):
-        if self.verificar_sistema(titulo) is None:
+        titulo = input("titulo: ")
+        autor = input("autor: ")
+        emprestimo = input("emprestimo: ")
+        estado = input("estado: ")
+        assunto = input("assunto: ")
+        if self.verificar_sistema(titulo) is False:
             livros = {"titulo":titulo,
                       "autor": autor,
                       "emprestimo": emprestimo,
@@ -23,7 +28,6 @@ class Sistema():
                       "assunto": assunto} 
             self.livros_cadastrados.append(livros)
             print('Livro cadastrado com sucesso!')
-            print(self.livros_cadastrados)
             return True
         else:
             print('Livro já cadastrado!')
@@ -40,20 +44,21 @@ class Sistema():
 
     def remover_livro(self, titulo= str):
         livro = self.verificar_sistema(titulo)
-        if livro is None:
-            print("Livro inexistente")
+        if livro is False:
             return False
         else:
             self.livros_cadastrados.remove(livro)
-            print("Livro removido")
             return True
 
     def buscar_autor(self, autor= str):
-        pass
+        for indice, autor2 in enumerate(self.livros_cadastrados):
+            if autor2.get('autor') == autor:
+                print('Livros: ', autor2)            
 
     def atualizar_livro(self, titulo= str):
         if self.remover_livro(titulo):
             self.cadastrar_livro()
+            print("Livro atualizado")
             return True
         return False
 
@@ -72,29 +77,29 @@ class Menu():
     def main(self):
         self.imprimir_commandos()
         opcao = int(input("Digite uma opção acima: "))
-        while opcao != 6:
+        while opcao in [1, 2, 3, 4, 5]:
             if opcao == 1:
-                titulo = input("titulo: ")
-                autor = input("autor: ")
-                emprestimo = input("emprestimo: ")
-                estado = input("estado: ")
-                assunto = input("assunto: ")
-                self.sistema.cadastrar_livro(titulo, autor, emprestimo, estado, assunto)
+                self.sistema.cadastrar_livro()
 
             elif opcao == 2:
                 titulo = input('titulo que deseja remover: ')
-                self.sistema.remover_livro(titulo)
+                if self.sistema.remover_livro(titulo):
+                    print("Livro removido")
+                else:
+                    print("Livro inexistente")               
 
             elif opcao == 3:
                 titulo = input('Titulo que desejas atualizar: ')
                 self.sistema.atualizar_livro(titulo)
             
             elif opcao == 4:
-                pass
+                autor = input('Autor: ')
+                self.sistema.buscar_autor(autor)
             
             elif opcao == 5:
                 arq = input('digite o nome do arquivo: ')
                 self.sistema.salvar_arquivo(arq)
+                break
 
             self.imprimir_commandos()
             opcao = int(input("Digite uma opção acima: "))
