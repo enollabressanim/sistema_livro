@@ -32,7 +32,6 @@ class Sistema():
         else:
             print('Livro já cadastrado!')
             return False
-        pass
 
     def salvar_arquivo(self, arq= str):
         arquivo = open(arq, "a")
